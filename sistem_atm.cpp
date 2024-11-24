@@ -119,7 +119,7 @@ void setorSaldo(int &saldo, int transaksi[], string deskripsi[], int idTransaksi
     cin >> jumlah;
 
     saldo += jumlah;
-    transaksi[indexTransaksi] = jumlah;
+    transaksi[indexTransaksi] = -jumlah;
     deskripsi[indexTransaksi] = "Setor Saldo";
     idTransaksi[indexTransaksi] = rand() % 90000000 + 10000000;
     indexTransaksi++;
@@ -203,7 +203,7 @@ do {system("cls");
     cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
     for (int i = halaman * transHal; i < min(indexTransaksi, (halaman + 1) * transHal); i++)
     {
-        string nominalTrans = (transaksi[i] > 0 ? "+" : "") + to_string(abs(transaksi[i]));
+        string nominalTrans = (transaksi[i] > 0 ? "+" : "-") + to_string(abs(transaksi[i]));
         string tujuan = deskripsi[i];
         cout << "|" << setw(3) << i + 1 << " | " << setw(10) << idTransaksi[i] << " | Rp" << setw(15) << nominalTrans + ",00" << " | " << setw(15) << tujuan << " |\n";
     }
