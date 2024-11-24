@@ -1,13 +1,15 @@
 #include <iostream>
 #include <cstdlib>
+#include <iomanip>
+#include <ctime>
 using namespace std;
 // Declare Function
 void login();
 void cekSaldo(int saldo);
-void setorSaldo(int &saldo, int transaksi[], int &indexTransaksi);
-void tarikSaldo(int &saldo, int transaksi[], int &indexTransaksi);
-void transferRekening(int &saldo, int transaksi[], int &indexTransaksi);
-void riwayatTransaksi(int transaksi[], int indexTransaksi);
+void setorSaldo(int &saldo, int transaksi[], string deskripsi[], int idTransaksi[], int &indexTransaksi);
+void tarikSaldo(int &saldo, int transaksi[], string deskripsi[], int idTransaksi[], int &indexTransaksi);
+void transferRekening(int &saldo, int transaksi[], string deskripsi[], int idTransaksi[], int &indexTransaksi);
+void riwayatTransaksi(int transaksi[], string deskripsi[], int idTransaksi[], int indexTransaksi);
 void Pause();
 
 int main()
@@ -19,6 +21,8 @@ int main()
     const int max_chance = 3;
     int chance = 0;
     int transaksi[100];
+    string deskripsi[100];
+    int idTransaksi[100];
     int indexTransaksi = 0;
     int saldo = 0;
     int choice;
@@ -65,9 +69,9 @@ int main()
     {
         system("cls");
         cout << "\t\t<<< Menu ATM >>>\n";
-        cout << "1> Cek Saldo\t\t\t     Transfer Rekening <4\n";
-        cout << "2> Setor Saldo\t\t\t     Riwayat Transaksi <5\n";
-        cout << "3> Tarik Saldo\t\t\t     Exit              <6\n";
+        cout << "1> Cek Saldo\t\t\t     Transfer Rekening <4\n\n";
+        cout << "2> Setor Saldo\t\t\t     Riwayat Transaksi <5\n\n";
+        cout << "3> Tarik Tunai\t\t\t     Exit              <6\n\n";
         cout << "Masukkan pilihan >> ";
         cin >> choice;
         switch (choice)
@@ -76,16 +80,16 @@ int main()
             cekSaldo(saldo);
             break;
         case 2:
-            setorSaldo(saldo, transaksi, indexTransaksi);
+            setorSaldo(saldo, transaksi, deskripsi, idTransaksi, indexTransaksi);
             break;
         case 3:
-            tarikSaldo(saldo, transaksi, indexTransaksi);
+            tarikSaldo(saldo, transaksi, deskripsi, idTransaksi, indexTransaksi);
             break;
         case 4:
-            transferRekening(saldo, transaksi, indexTransaksi);
+            transferRekening(saldo, transaksi, deskripsi, idTransaksi, indexTransaksi);
             break;
         case 5:
-            riwayatTransaksi(transaksi, indexTransaksi);
+            riwayatTransaksi(transaksi, deskripsi, idTransaksi, indexTransaksi);
             break;
         case 6:
             cout << "Terimakasih telah menggunakan ATM ini, Anda kena hack wkwkwk 😂😂😂😂😂😂😂😂😂😍😍😍😍😍😍😍😘😘🤣🤣🤣🤣" << endl;
@@ -95,7 +99,7 @@ int main()
             cout << "Pilihan yang Anda masukkan salah\n";
             break;
         }
-    } while (choice != 5);
+    } while (choice != 6);
     return 0;
 }
 // Fungsi Login
@@ -107,21 +111,25 @@ void cekSaldo(int saldo)
     Pause();
 }
 // Function Setor Saldo
-void setorSaldo(int &saldo, int transaksi[], int &indexTransaksi)
+void setorSaldo(int &saldo, int transaksi[], string deskripsi[], int idTransaksi[], int &indexTransaksi)
 {
     int jumlah;
     cout << "Masukkan jumlah saldo yang ingin ditransfer\n";
     cout << ">> ";
     cin >> jumlah;
+
     saldo += jumlah;
-    transaksi[indexTransaksi++] = jumlah;
+    transaksi[indexTransaksi] = jumlah;
+    deskripsi[indexTransaksi] = "Setor Saldo";
+    idTransaksi[indexTransaksi] = rand() % 90000000 + 10000000;
+    indexTransaksi++;
     Pause();
 }
 // Function Tarik Saldo
-void tarikSaldo(int &saldo, int transaksi[], int &indexTransaksi)
+void tarikSaldo(int &saldo, int transaksi[], string deskripsi[], int idTransaksi[], int &indexTransaksi)
 {
     int jumlah;
-    cout << "Masukkan jumlah saldo yang ingin ditarik\n";
+    cout << "Masukkan jumlah Tunai yang ingin ditarik\n";
     cout << ">> ";
     cin >> jumlah;
     if (saldo < jumlah)
@@ -131,14 +139,16 @@ void tarikSaldo(int &saldo, int transaksi[], int &indexTransaksi)
     else
     {
         saldo -= jumlah;
+        transaksi[indexTransaksi] = jumlah;
+        deskripsi[indexTransaksi] = "Tarik Saldo";
+        idTransaksi[indexTransaksi] = rand() % 90000000 + 10000000;
+        indexTransaksi++;
         cout << "Saldo anda saat ini tersisa : " << saldo << endl;
     }
-
-    transaksi[indexTransaksi++] = -jumlah;
     Pause();
 }
 // Function Transfer Rekening
-void transferRekening(int &saldo, int transaksi[], int &indexTransaksi)
+void transferRekening(int &saldo, int transaksi[], string deskripsi[], int idTransaksi[], int &indexTransaksi)
 {
     int rekening_tujuan;
     int jumlah;
@@ -163,30 +173,70 @@ void transferRekening(int &saldo, int transaksi[], int &indexTransaksi)
     else
     {
         saldo -= jumlah;
-        transaksi[indexTransaksi++] = -jumlah;
+        transaksi[indexTransaksi] = -jumlah;
+        deskripsi[indexTransaksi] = "Transfer";
+        idTransaksi[indexTransaksi] = rand() % 90000000 + 10000000;
+        indexTransaksi++;
         cout << "Transfer berhasil ke rekening " << rekening_tujuan << "\n";
         cout << "Saldo anda saat ini tersisa : " << saldo << endl;
     }
     Pause();
 }
 // Function Riwayat Transaksi
-void riwayatTransaksi(int transaksi[], int indexTransaksi)
+void riwayatTransaksi(int transaksi[], string deskripsi[], int idTransaksi[], int indexTransaksi)
 {
-    cout << "Riwayat Transaksi:\n";
-    for (int i = 0; i < indexTransaksi; i++)
+    const int transHal =  5;
+    int halaman = 0;
+    int totalHal = (indexTransaksi + transHal - 1)/ transHal;
+    int pilihan;
+    bool exit = false;
+    if (indexTransaksi == 0)
     {
-        if (transaksi[i] > 0)
-        {
-            cout << i + 1 << ". Masuk: Rp" << transaksi[i] << endl;
-        }
-        else
-        {
-            cout << i + 1 << ". Keluar: Rp" << -transaksi[i] << endl;
-        }
+        cout << "Riwayat transaksi anda belum ada\n";
+        Pause();
+        return;
     }
+do {system("cls");
+    cout << "<= Riwayat Transaksi =>\n";
+    cout << "Page (" << halaman + 1 << "/" << totalHal << ")\n";
+    cout << "|No | Id Transaksi | Nominal         | Tujuan           |\n";
+    cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+    for (int i = halaman * transHal; i < min(indexTransaksi, (halaman + 1) * transHal); i++)
+    {
+        string nominalTrans = (transaksi[i] > 0 ? "+" : "") + to_string(abs(transaksi[i]));
+        string tujuan = deskripsi[i];
+        cout << "|" << setw(3) << i + 1 << " | " << setw(10) << idTransaksi[i] << " | Rp" << setw(15) << nominalTrans + ",00" << " | " << setw(15) << tujuan << " |\n";
+    }
+    cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+    cout << "\n                                       Next Page     1<\n";
+    cout <<"                                       Previous Page 2<\n";
+    cout << "                                       Keluar        3<\n";
+    cout << "Masukkan pilihan >> ";
+    cin >> pilihan;
+
+    if (pilihan == 1)
+    {
+        halaman = (halaman + 1) % totalHal;
+    } else if (pilihan == 2)
+    {
+        halaman = (halaman - 1) % totalHal;
+    } else if (pilihan == 3)
+    {
+        exit = true;
+    } else
+    {
+        cout << "pilihan yang Anda masukkan salah\n";
+        Pause();
+    }
+    } while (!exit);
     Pause();
 }
 void Pause()
+{
+    cout << "\nTekan Enter untuk melanjutkan...\n";
+    cin.ignore();
+    cin.get();
+}
 {
     cout << "\nTekan Enter untuk melanjutkan...\n";
     cin.ignore();
