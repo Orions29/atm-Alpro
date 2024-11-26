@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <ctime>
 using namespace std;
-// Declare Function
+// (NEW) Declare Function
 void login();
 void cekSaldo(int saldo);
 void setorSaldo(int &saldo, int transaksi[], string deskripsi[], int idTransaksi[], int &indexTransaksi);
@@ -11,6 +11,14 @@ void tarikSaldo(int &saldo, int transaksi[], string deskripsi[], int idTransaksi
 void transferRekening(int &saldo, int transaksi[], string deskripsi[], int idTransaksi[], int &indexTransaksi);
 void riwayatTransaksi(int transaksi[], string deskripsi[], int idTransaksi[], int indexTransaksi);
 void Pause();
+// Declare Function
+// void login();
+// void cekSaldo(int saldo);
+// void setorSaldo(int &saldo, int transaksi[], int &indexTransaksi);
+// void tarikSaldo(int &saldo, int transaksi[], int &indexTransaksi);
+// void transferRekening(int &saldo, int transaksi[], int &indexTransaksi);
+// void riwayatTransaksi(int transaksi[], int indexTransaksi);
+// void Pause();
 
 int main()
 {
