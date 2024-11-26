@@ -1,18 +1,37 @@
 #include <iostream>
 #include <iomanip>
 using namespace std;
+
 // >> Global Var Init
 bool mainMenuLoop = false;
+// Inisialisasi Global Array (Wajib Ada)
+nasabah dataNasabah[100]; // menyimpan 100 data 100 nasabah
+int jumlahNasabah = 0;    // Total Jumlah Data yang dimiliki
 // >> Struct Init
-// -(OTW)
+struct histori
+{
+      int idTrans;
+      int nominal;
+      int noRektuj;
+};
+
+struct nasabah
+{
+      int noRek;
+      string pass;
+      string nama;
+      int saldo;
+      int jumlahTrans;
+      histori historiNasabah[100];
+};
 // >> Decklare Funtion
 // Error handling Func (Overload)
-void inputHandling(string question, string &var); // Untuk String
-void inputHandling(string question, int &var);    // Untuk Integer
-void inputHandling(string question, float &var);  // Untuk Float
-void inputHandling(string question, short &var);  // Untuk short
-// CRUD Data Nasabah
-// -(OTW)
+void inputHandling(string question, string &var, short lineOr); // Untuk String
+void inputHandling(string question, int &var);                  // untuk int
+void inputHandling(string question, float &var);                // untuk float
+void inputHandling(string question, short &var);                // untuk short
+// Init Data Nasabah
+void inisialisasiData();
 // Main Feature
 void login();
 void cekSaldo(int saldo);
@@ -45,14 +64,25 @@ int main()
       } while (mainMenuLoop = false);
       return 0;
 }
+// >> Desc Function
 // Error Handling Funct
-void inputHandling(string question, string &var)
+// Overloading Funct untuk Error Handling Pengguna
+void inputHandling(string question, string &var, short lineOr)
 {
       bool statLoop = false;
       do
       {
             cout << question;
-            cin >> var;
+            // Jika 1 maka Spasi dianggap kesalahan
+            if (lineOr == 1)
+            {
+                  cin >> var;
+            }
+            // Jika 2 maka spasi akan dibaca
+            else if (lineOr == 2)
+            {
+                  getline(cin, var);
+            }
             if (cin.fail())
             {
                   cin.clear();          // Menghapus Semua Fail Flag
@@ -66,6 +96,7 @@ void inputHandling(string question, string &var)
             }
       } while (statLoop == true);
 };
+// Untuk Variabel Integer
 void inputHandling(string question, int &var)
 {
       bool statLoop = false;
@@ -86,6 +117,7 @@ void inputHandling(string question, int &var)
             }
       } while (statLoop == true);
 };
+// Untuk Variabel FLoat
 void inputHandling(string question, float &var)
 {
       cout << question;
@@ -106,7 +138,43 @@ void inputHandling(string question, float &var)
             }
       } while (statLoop == true);
 };
-// Main Feature Funct Desc
-void login()
+// Untuk Short Short
+void inputHandling(string question, short &var)
 {
+      cout << question;
+      bool statLoop = false;
+      do
+      {
+            cin >> var;
+            if (cin.fail())
+            {
+                  cin.clear();          // Menghapus Semua Fail Flag
+                  cin.ignore(30, '\n'); // Mengabaikan Input
+                  cout << "\n[Error Tag] -" << "Walah Mas Nginput apa njenengan\n";
+                  statLoop = true;
+            }
+            else
+            {
+                  statLoop = false;
+            }
+      } while (statLoop == true);
+};
+// Data Init Function
+void inisialisasiData()
+{
+      dataNasabah[jumlahNasabah++] =
+          {12345678, "admin", "Rio Meidi A", 2000000, 3,
+           {// Inisialisasi langsung historiNasabah
+            {1, 500000, 87654321},
+            {2, 300000, 87654322},
+            {3, 200000, 87654323}}};
+      dataNasabah[jumlahNasabah++] =
+          {12215678, "admin", "Tony Antonio", 7000000, 3,
+           {// Inisialisasi langsung historiNasabah
+            {1, 500000, 87654321},
+            {2, 300000, 87654322},
+            {3, 200000, 87654323}}};
+      // Kalau Kurang silahkan di tambah sendiri
 }
+// Main Feature Funct Desc
+// (Jauza)
