@@ -1,9 +1,9 @@
 #include <iostream>
 #include <iomanip> //
-#include <cstdlib> //Belum Tau
-#include <ctime>   //Buat Pause Juga
-#include <thread>  //Buat Pause keknya
-#include <chrono>  //Buat Pause
+#include <cstdlib> // untuk menggunakan system("cls")
+#include <ctime> // untuk mengatur seed pada fungsi rand()
+#include <thread> // untuk menggunakan fungsi multithreading cnth sleep_for
+#include <chrono> // untuk menangani waktu dengan tepat sangat penting karena untuk penggunaan sleep_for yang membutuhkan parameter bertipe durasi
 using namespace std;
 
 // >> Struct Init
@@ -253,6 +253,11 @@ void login()
             {
                   cout << "\n<Login berhasil>\n";
                   Pause();
+                  cout << "\n <= Selamat Datang " << dataNasabah[indexNasabah].nama << " =>\n\n";
+                  cout << "Data Rekening :" << endl;
+                  cout << setw(10) << "A.N." << setw(5) << ": " << dataNasabah[indexNasabah].nama << endl;
+                  cout << setw(10) << "No.Rek" << setw(5) << " : " << dataNasabah[indexNasabah].noRek << endl;
+                  Pause();
                   break;
             }
             else
@@ -299,6 +304,7 @@ void setorSaldo()
 {
       int jumlah;
       short pilihan;
+      srand(time(0)); //mengatur seed pada rand() untuk menggunakan waktu saat ini memastikan tidak membawa seed bawaan ctime
       do
       {
             cout << "\n <= Setor Saldo =>\n\n";
@@ -317,7 +323,7 @@ void setorSaldo()
                   dataNasabah[indexNasabah].saldo += jumlah;
                   dataNasabah[indexNasabah].jumlahTrans++;
                   dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].nominal = jumlah;
-                  dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].idTrans = rand() % 90000000 + 10000000; // nomor Id Acak
+                  dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].idTrans = rand() % 90000000 + 10000000; // Nomor Id acak mengambil dari rentang 0 hingga 89999999 kemudian ditambahkan 10000000
                   dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].noRektuj = dataNasabah[indexNasabah].noRek;
                   dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].deskripsi = "Setor Saldo";
                   cout << "\nSystem is ";
@@ -347,6 +353,7 @@ void tarikSaldo()
 {
       int jumlah;
       short pilihan;
+      srand(time(0)); //mengatur seed pada rand() untuk menggunakan waktu saat ini memastikan tidak membawa seed bawaan ctime
       do
       {
             cout << "\n <= Tarik Tunai =>\n\n";
@@ -379,7 +386,7 @@ void tarikSaldo()
                         dataNasabah[indexNasabah].saldo -= jumlah;
                         dataNasabah[indexNasabah].jumlahTrans++;
                         dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].nominal = jumlah;
-                        dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].idTrans = rand() % 90000000 + 10000000; // nomor Id Acak
+                        dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].idTrans = rand() % 90000000 + 10000000; // Nomor Id acak mengambil dari rentang 0 hingga 89999999 kemudian ditambahkan 10000000
                         dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].noRektuj = dataNasabah[indexNasabah].noRek;
                         dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].deskripsi = "Tarik Saldo";
                         cout << "\nSystem is ";
@@ -411,6 +418,7 @@ void transferDeposito()
       int rekening_tujuan, jumlah, indexFound;
       short pilihan;
       bool find = false;
+      srand(time(0)); //mengatur seed pada rand() untuk menggunakan waktu saat ini memastikan tidak membawa seed bawaan ctime
       do
       {
             do
@@ -465,14 +473,14 @@ void transferDeposito()
                         dataNasabah[indexNasabah].saldo -= jumlah;
                         dataNasabah[indexNasabah].jumlahTrans++;
                         dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].nominal = 0 - jumlah;
-                        dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].idTrans = rand() % 90000000 + 10000000; // nomor Id Acak
+                        dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].idTrans = rand() % 90000000 + 10000000; // Nomor Id acak mengambil dari rentang 0 hingga 89999999 kemudian ditambahkan 10000000
                         dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].noRektuj = dataNasabah[indexNasabah].noRek;
                         dataNasabah[indexNasabah].historiNasabah[dataNasabah[indexNasabah].jumlahTrans].deskripsi = "Tarik Saldo";
                         // Update Data Nasabah Penerima
                         dataNasabah[indexFound].jumlahTrans++;
                         dataNasabah[indexFound].saldo += jumlah;
                         dataNasabah[indexFound].historiNasabah[dataNasabah[indexFound].jumlahTrans].nominal = jumlah;
-                        dataNasabah[indexFound].historiNasabah[dataNasabah[indexFound].jumlahTrans].idTrans = rand() % 90000000 + 10000000; // nomor Id Acak
+                        dataNasabah[indexFound].historiNasabah[dataNasabah[indexFound].jumlahTrans].idTrans = rand() % 90000000 + 10000000; // Nomor Id acak mengambil dari rentang 0 hingga 89999999 kemudian ditambahkan 10000000
                         dataNasabah[indexFound].historiNasabah[dataNasabah[indexFound].jumlahTrans].noRektuj = dataNasabah[indexFound].noRek;
                         dataNasabah[indexFound].historiNasabah[dataNasabah[indexFound].jumlahTrans].deskripsi = "Menerima Saldo";
                         cout << "\nSystem is ";
@@ -555,28 +563,28 @@ void riwayatTransaksi(int transaksi[], string deskripsi[], int idTransaksi[], in
 void Pause()
 {
       cout << "\nSystem is ";
-      SlowType("processing", 100);
-      this_thread::sleep_for(chrono::seconds(1));
-      DeleteText(10, 100);
-      SlowType("completed", 100);
+      SlowType("processing", 100); //menggunakan fungsi slowtype() mengetik dengan delay 100 milidetik setiap karakter
+      this_thread::sleep_for(chrono::seconds(1)); // memberikan jeda selama 1 detik menggunakan sleep_for dari library thread
+      DeleteText(10, 100); // menghapus 10 karakter dengan delay 100 milidetik
+      SlowType("completed", 100); //mengetik dengan delay 100 milidetik setiap karakter
       cout << endl;
-      this_thread::sleep_for(chrono::seconds(1));
+      this_thread::sleep_for(chrono::seconds(1)); // memberikan jeda selama 1 detik menggunakan sleep_for dari library thread
       system("cls");
 }
 // Animasi untuk pause
-void SlowType(const string &kata, int delay)
+void SlowType(const string &kata, int delay) //menampilkan kata satu per satu dengan jeda waktu
 {
-      for (char c : kata)
+      for (char c : kata) // membaca setiap karakter yang diinginkan
       {
             cout << c << flush;
             this_thread::sleep_for(chrono::milliseconds(delay));
       }
 }
-void DeleteText(int count, int delay)
+void DeleteText(int count, int delay) //menghapus karakter satu per satu dengan jeda waktu
 {
       for (int i = 0; i < count; ++i)
       {
             cout << "\b \b" << flush;
-            this_thread::sleep_for(chrono::milliseconds(delay));
+            this_thread::sleep_for(chrono::milliseconds(delay)); // memberikan jeda pada penghapusan kata
       }
 }
