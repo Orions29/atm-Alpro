@@ -1,9 +1,9 @@
 #include <iostream>
 #include <iomanip>
-#include <cstdlib>
-#include <ctime>
-#include <thread>
-#include <chrono>
+#include <cstdlib> // untuk menggunakan system("cls")
+#include <ctime> // untuk mengatur seed pada fungsi rand()
+#include <thread> // untuk menggunakan fungsi multithreading
+#include <chrono> // untuk menangani waktu dengan tepat
 using namespace std;
 // >> Global Var Init
 bool mainMenuLoop = false;
@@ -216,6 +216,7 @@ void setorSaldo(int &saldo, int transaksi[], string deskripsi[], int idTransaksi
       int noRek = 12345678;
       int jumlah;
       int pilihan;
+      srand(time(0)); //mengatur seed pada rand() untuk menggunakan waktu saat ini memastikan tidak membawa seed bawaan ctime
       do
       {
             cout << "\n <= Setor Saldo =>\n\n";
@@ -237,7 +238,7 @@ void setorSaldo(int &saldo, int transaksi[], string deskripsi[], int idTransaksi
                   saldo += jumlah;
                   transaksi[indexTransaksi] = jumlah;
                   deskripsi[indexTransaksi] = "Setor Saldo";
-                  idTransaksi[indexTransaksi] = rand() % 90000000 + 10000000; // Nomor Id acak
+                  idTransaksi[indexTransaksi] = rand() % 90000000 + 10000000; // Nomor Id acak mengambil dari rentang 0 hingga 89999999 kemudian ditambahkan 10000000
                   indexTransaksi++;
                   cout << "\nSystem is ";
                   SlowType("processing", 100);
@@ -268,6 +269,7 @@ void tarikSaldo(int &saldo, int transaksi[], string deskripsi[], int idTransaksi
       string namaPem = "Admin Test";
       int noRek = 12345678;
       int pilihan;
+      srand(time(0));
       do
       {
             cout << "\n <= Tarik Tunai =>\n\n";
@@ -334,6 +336,7 @@ void transferRekening(int &saldo, int transaksi[], string deskripsi[], int idTra
       string namaPem = "Admin Test";
       int noRek = 12345678;
       int pilihan;
+      srand(time(0));
       do
       {
             cout << "\n <= Tarik Tunai =>\n\n";
@@ -455,29 +458,29 @@ void riwayatTransaksi(int transaksi[], string deskripsi[], int idTransaksi[], in
 void Pause()
 {
       cout << "\nSystem is ";
-      SlowType("processing", 100);
-      this_thread::sleep_for(chrono::seconds(1));
-      DeleteText(10, 100);
+      SlowType("processing", 100); //mengetik dengan delay 100 milidetik setiap karakter
+      this_thread::sleep_for(chrono::seconds(1)); // memberikan jeda selama 1 detik menggunakan sleep_for dari library thread 
+      DeleteText(10, 100); // menghapus 10 karakter dengan delay 100 milidetik
       SlowType("completed", 100);
       cout << endl;
       this_thread::sleep_for(chrono::seconds(1));
       system("cls");
 }
 // Animasi untuk pause
-void SlowType(const string &kata, int delay)
+void SlowType(const string &kata, int delay) //menampilkan kata satu per satu dengan jeda waktu
 {
-      for (char c : kata)
+      for (char c : kata) // membaca setiap karakter yang diinginkan
       {
             cout << c << flush;
-            this_thread::sleep_for(chrono::milliseconds(delay));
+            this_thread::sleep_for(chrono::milliseconds(delay)); // memberikan jeda pada pengetikan kata
       }
 }
 
-void DeleteText(int count, int delay)
+void DeleteText(int count, int delay) //menghapus karakter satu per satu dengan jeda waktu
 {
       for (int i = 0; i < count; ++i)
       {
-            cout << "\b \b" << flush;
-            this_thread::sleep_for(chrono::milliseconds(delay));
+            cout << "\b \b" << flush; 
+            this_thread::sleep_for(chrono::milliseconds(delay)); // memberikan jeda pada penghapusan kata
       }
 }
