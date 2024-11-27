@@ -38,7 +38,7 @@ int main()
 {
       inisialisasiData();
       // inputNasabah();
-      tampilDataNasabah(123456888);
+      tampilDataNasabah(12345678);
       // delNasabah();
       // tampilDataNasabah(0);
       return 0;

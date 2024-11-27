@@ -95,7 +95,9 @@ setw(60) ->
 
       3.3) Riwayat Transaksi
 
+Example : 06306781
 Id Transaksi (HHMMCCVI)
+i List: 
 1. Deposit Sendiri
 2. Deposit Rekening Lain 
 3. Transfer Keluar
