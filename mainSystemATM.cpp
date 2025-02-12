@@ -7,7 +7,7 @@
 #include <chrono>  // untuk menangani waktu dengan tepat sangat penting karena untuk penggunaan sleep_for yang membutuhkan parameter bertipe durasi
 using namespace std;
 // >> Struct Init
-// testing comment
+// NOTE Dimasukkan ke Multifile
 // Struct untuk Histori
 struct histori
 {
