@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <string>
 #include <cstdlib> // untuk menggunakan system("cls")
 #include <ctime>   // untuk mengatur seed pada fungsi rand()
 #include <thread>  // untuk menggunakan fungsi multithreading cnth sleep_for
