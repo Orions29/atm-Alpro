@@ -5,6 +5,7 @@
 #include <ctime>   // untuk mengatur seed pada fungsi rand()
 #include <thread>  // untuk menggunakan fungsi multithreading cnth sleep_for
 #include <chrono>  // untuk menangani waktu dengan tepat sangat penting karena untuk penggunaan sleep_for yang membutuhkan parameter bertipe durasi
+#include <algorithm> // untuk algoritma sorting
 using namespace std;
 // >> Struct Init
 // testing comment
@@ -334,13 +335,45 @@ void inisialisasiData()
 }
 // CRUD Funct
 // Fungsi Untuk Menampilkan Data Nasabah dengan parameter nomor rekening
+bool sortByNoRek(nasabah a, nasabah b){
+      return a.noRek < b.noRek;
+}
+
+bool sortBySaldo(nasabah a, nasabah b){
+      return a.saldo > b.saldo;
+}
+
 void tampilDataNasabah()
 {
       system("cls");
       bool find = false;
       int noRekIn = 0;
+      short pilihanSort;
       cout << "\n\t>- Menu Tampil Data Nasabah -<\n\n";
-      Pause();
+      cout << "Pilih metode pengurutan\n";
+      cout << "1. Berdasarkan Nomor Rekening\n";
+      cout << "Pilihan : ";
+      inputHandling("",pilihanSort);
+            if (pilihanSort == 1)
+            {
+                  sort(dataNasabah, dataNasabah + jumlahNasabah, sortByNoRek);
+            } else {
+                  cout << "[ERROR INPUT] - Pilihan tidak valid, menampilkan tanpa pengurutan";
+            }
+
+      cout << "\n\t>- Menu Tampil Data Nasabah -<\n\n";
+      cout << "\nDaftar Nasabah:\n";
+      cout << left << "| " << setw(10) << "No Rek" << " | " << setw(25) << "Nama" << " |\n";
+      cout << setfill('-') << setw(41) << "-" << setfill(' ') << endl;
+
+    for (int i = 0; i < jumlahNasabah; i++) {
+        cout << "| " << setw(10) << dataNasabah[i].noRek
+             << " | " << setw(25) << dataNasabah[i].nama << " |\n";
+            
+              
+    }
+    cout << setfill('-') << setw(41) << "-" << setfill(' ') << endl;
+      //Pause();
       inputHandling("Berapa Nomor Rekeningnya?: ", noRekIn);
       for (int i = 0; i <= jumlahNasabah; i++)
       {
@@ -459,19 +492,20 @@ void login()
       {
             inputHandling("\nMasukkan Nomor Rekening (8 Digit)\n>> ", noRekIn);
             inputHandling("\nMasukkan Password Rekening\n>> ", passIn, 1);
-            for (int i = 0; i <= jumlahNasabah; i++)
+            for (int i = 0; i < jumlahNasabah; i++)
             {
                   if (noRekIn == dataNasabah[i].noRek && passIn == dataNasabah[i].pass)
                   {
-                        if (dataNasabah[i].noRek == 459777345)
+                        if (dataNasabah[i].noRek == 459777345) // Jika login sebagai admin
                         {
                               adminStat = true;
                               loginStat = true;
+                              indexNasabah = -1; // biar akses arraynya gapake index negatip
                         }
                         else
                         {
                               loginStat = true;
-                              indexNasabah = i; // Memasukkan noRekLogin kedalam list on admin
+                              indexNasabah = i; // Menyimpan indeks nasabah yang login
                         }
                         break;
                   }
@@ -480,10 +514,17 @@ void login()
             {
                   cout << "\n<Login berhasil>\n";
                   Pause();
-                  cout << "\n <= Selamat Datang " << dataNasabah[indexNasabah].nama << " =>\n\n";
-                  cout << "Data Rekening :" << endl;
-                  cout << setw(10) << "A.N." << setw(5) << ": " << dataNasabah[indexNasabah].nama << endl;
-                  cout << setw(10) << "No.Rek" << setw(5) << " : " << dataNasabah[indexNasabah].noRek << endl;
+
+                  // Pastikan admin tidak mencoba mengakses dataNasabah jika login sebagai admin
+                  if (!adminStat) {
+                        cout << "\n <= Selamat Datang " << dataNasabah[indexNasabah].nama << " =>\n\n";
+                        cout << "Data Rekening :" << endl;
+                        cout << setw(10) << "A.N." << setw(5) << ": " << dataNasabah[indexNasabah].nama << endl;
+                        cout << setw(10) << "No.Rek" << setw(5) << " : " << dataNasabah[indexNasabah].noRek << endl;
+                  } else {
+                        cout << "\n <= Selamat Datang Admin =>\n\n"; // Admin tidak memiliki rekening tertentu
+                  }
+
                   Pause();
                   break;
             }
@@ -492,11 +533,12 @@ void login()
                   cout << "\n[Login gagal] - Kesempatan Anda tersisa " << (--max_chance) << endl;
             }
       } while (max_chance > 0);
+      
       if (max_chance == 0)
       {
             cout << "<Kesempatan Anda habis. Program akan keluar.>";
             exit(0);
-      }
+      } 
 }
 // Fungsi Cek Saldo
 void cekSaldo()
@@ -639,12 +681,34 @@ void tarikSaldo()
       } while (pilihan != 1 && pilihan != 2);
 }
 // Function Transfer Rekening
+bool sortByNorek(nasabah a, nasabah b){
+      return a.noRek < b.noRek;
+}
+
+
 void transferRekening()
 {
       int rekening_tujuan, jumlah, indexFound;
       short pilihan;
       bool find = false;
       srand(time(0)); // mengatur seed pada rand() untuk menggunakan waktu saat ini memastikan tidak membawa seed bawaan ctime
+      
+      sort(dataNasabah, dataNasabah + jumlahNasabah, sortByNorek);
+      system("cls");
+
+      cout << "\n\t>- Menu Transfer Rekening -<\n\n";
+      cout << left << "| " << setw(10) << "No Rek" << " | "
+            << setw(25) << "Nama" << " |\n";
+      cout << setfill('-') << setw(40) << "-" << setfill(' ') << endl;
+
+      for (int i = 0; i < jumlahNasabah; i++) {
+            
+            if (i != indexNasabah) {
+                  cout << "| " << setw(10) << dataNasabah[i].noRek
+                       << " | " << setw(25) << dataNasabah[i].nama << " |\n";
+            }
+      }
+            cout << setfill('-') << setw(40) << "-" << setfill(' ')<< endl;
       do
       {
             do
@@ -733,6 +797,16 @@ void transferRekening()
       } while (pilihan != 1 && pilihan != 2);
 }
 // Function Riwayat Transaksi
+bool sortByNominal(histori a, histori b){
+      return a.nominal > b.nominal;
+}
+
+bool sortByID(histori a, histori b){
+      return a.idTrans < b.idTrans;
+}
+
+
+
 void riwayatTransaksi()
 {
       const int transHal = 5;
@@ -746,6 +820,27 @@ void riwayatTransaksi()
             Pause();
             return;
       }
+            cout << "\nPilih metode Pengurutan : ";
+            cout << "\n1. Berdasarkan Nominal ";
+            cout << "\n2. Berdasarkan ID Transaksi ";
+            cout << "\nPilihan : ";
+            inputHandling("", pilihan);
+
+      if (pilihan == 1)
+      {
+            sort(dataNasabah[indexNasabah].historiNasabah,
+            dataNasabah[indexNasabah].historiNasabah + dataNasabah[indexNasabah].jumlahTrans,
+            sortByNominal);
+      }
+      else if (pilihan == 2)
+      {
+            sort(dataNasabah[indexNasabah].historiNasabah, 
+            dataNasabah[indexNasabah].historiNasabah + dataNasabah[indexNasabah].jumlahTrans, 
+            sortByID);
+      } else {
+            cout << "[ERROR INPUT] - Pilihan tidak valid, menampilkan tanpa sorting.\n";
+        }
+      
       do
       {
             system("cls");
@@ -764,30 +859,19 @@ void riwayatTransaksi()
             cout << setw(84) << "Previous Page 2<\n";
             cout << setw(84) << "Kembali        3<\n";
             inputHandling("\n>> ", pilihan);
-            if (pilihan == 1)
-            {
-                  if (halaman + 1 < totalHal)
-                  {
-                        halaman++;
-                  }
-            }
-            else if (pilihan == 2)
-            {
-                  if (halaman > 0)
-                  {
-                        halaman--;
-                  }
-            }
-            else if (pilihan == 3)
-            {
+            if (pilihan == 1 && halaman + 1 < totalHal) {
+                  halaman++;
+              } else if (pilihan == 2 && halaman > 0) {
+                  halaman--;
+              } else if (pilihan == 3) {
                   exit = true;
-            }
-            else
-            {
-                  cout << "[ERROR INPUT] - pilihan yang Anda masukkan salah\n";
+              } else {
+                  cout << "[ERROR INPUT] - Pilihan yang Anda masukkan salah\n";
                   Pause();
-            }
-      } while (exit == false);
+              }
+      
+          }
+             while (exit == false);
       Pause();
 }
 // Function pause dilengkapi cls
